@@ -1,0 +1,247 @@
+<div class="student-wrapper">
+  <div class="container">
+    <div class="table-responsive">
+      <div class="table-wrapper">
+        <div class="table-title">
+          <div class="row d-flex align-items-center">
+            <div class="col-sm-8">
+              <h2>Students <b>Details</b></h2>
+              <p class="m-0"> Số lượng sinh viên: {{ students.length }}</p>
+            </div>
+            <div class="col-sm-4">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+                <i class="material-icons">&#xE147;</i> Thêm mới sinh viên
+              </button>
+            </div>
+          </div>
+        </div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Họ và tên</th>
+              <th>Mã sinh viên</th>
+              <th>Giới tính</th>
+              <th>Năm sinh</th>
+              <th>Email</th>
+              <th>Số điện thoại</th>
+              <th>Địa chỉ</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of students; let i = index; let o = odd; " [ngClass]="{'tr-bold': o}">
+              <td>{{i + 1}}</td>
+              <td>{{ student.name }}</td>
+              <td>{{ student.code }}</td>
+              <td>{{ student.gender }}</td>
+              <td>{{ student.dob }}</td>
+              <td>{{ student.email }}</td>
+              <td>{{ student.phone }}</td>
+              <td>{{ student.address }}</td>
+              <td>
+                <a class="edit" title="Edit" data-bs-toggle="modal" data-bs-target="#editStudentModal"
+                  (click)="openEditForm(student.id)"><i class="material-icons">&#xE254;</i></a>
+                <a class="delete" title="Delete" (click)="handleDeleteStudent(student.id)"><i
+                    class="material-icons">&#xE872;</i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Add Modal HTML -->
+    <div id="addStudentModal" class="modal fade">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form [formGroup]="addStudentForm" (ngSubmit)="handleAddStudent()">
+            <div class="modal-header">
+              <h4 class="modal-title">Thêm sinh viên</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-floating mb-3 ">
+                <input type="text" class="form-control" placeholder="studentName" autofocus formControlName="name"
+                  name="name">
+                <label>Họ và tên</label>
+                <div *ngIf="!name?.valid && (name?.touched || name?.dirty)">
+                  <div [hidden]="!name?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentCode" autofocus formControlName="code"
+                  name="code">
+                <label>Mã sinh viên</label>
+                <div *ngIf="!code?.valid && (code?.touched || code?.dirty)">
+                  <div [hidden]="!code?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentGender" autofocus formControlName="gender"
+                  name="gender">
+                <label>Giới tính</label>
+                <div *ngIf="!gender?.valid && (gender?.touched || gender?.dirty)">
+                  <div [hidden]="!gender?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studenDob" autofocus formControlName="dob"
+                  name="dob">
+                <label>Ngày, tháng, năm sinh</label>
+                <div *ngIf="!dob?.valid && (dob?.touched || dob?.dirty)">
+                  <div [hidden]="!dob?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentEmail" autofocus formControlName="email"
+                  name="email">
+                <label>Email</label>
+                <div *ngIf="!email?.valid && (email?.touched || email?.dirty)">
+                  <div [hidden]="!email?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                  <div [hidden]="!email?.errors?.email">
+                    <p class="text-danger p-1">Định dạng email không đúng</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentAddress" autofocus formControlName="address"
+                  name="address">
+                <label>Địa chỉ</label>
+                <div *ngIf="!address?.valid && (address?.touched || address?.dirty)">
+                  <div [hidden]="!address?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentPhone" autofocus formControlName="phone"
+                  name="phone">
+                <label>Số điện thoại</label>
+                <div *ngIf="!phone?.valid && (phone?.touched || phone?.dirty)">
+                  <div [hidden]="!phone?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-success" value="Thêm mới" [disabled]="!addStudentForm.valid" />
+              <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Cancel">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Edit Modal HTML -->
+    <div id="editStudentModal" class="modal fade">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form [formGroup]="editStudentForm" (ngSubmit)="handleEditStudent()">
+            <div class="modal-header">
+              <h4 class="modal-title">Thêm sinh viên</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentName" autofocus formControlName="name"
+                  name="name">
+                <label>Họ và tên</label>
+                <div *ngIf="!nameEdit?.valid && (nameEdit?.touched || nameEdit?.dirty)">
+                  <div [hidden]="!nameEdit?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentCode" autofocus formControlName="code"
+                  name="code">
+                <label>Mã sinh viên</label>
+                <div *ngIf="!codeEdit?.valid && (codeEdit?.touched || codeEdit?.dirty)">
+                  <div [hidden]="!codeEdit?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentGender" autofocus formControlName="gender"
+                  name="gender">
+                <label>Giới tính</label>
+                <div *ngIf="!genderEdit?.valid && (genderEdit?.touched || genderEdit?.dirty)">
+                  <div [hidden]="!genderEdit?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studenDob" autofocus formControlName="dob"
+                  name="dob">
+                <label>Ngày, tháng, năm sinh</label>
+                <div *ngIf="!dobEdit?.valid && (dobEdit?.touched || dobEdit?.dirty)">
+                  <div [hidden]="!dobEdit?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentEmail" autofocus formControlName="email"
+                  name="email">
+                <label>Email</label>
+                <div *ngIf="!emailEdit?.valid && (emailEdit?.touched || emailEdit?.dirty)">
+                  <div [hidden]="!emailEdit?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                  <div [hidden]="!emailEdit?.errors?.email">
+                    <p class="text-danger p-1">Định dạng email không đúng</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentAddress" autofocus formControlName="address"
+                  name="address">
+                <label>Địa chỉ</label>
+                <div *ngIf="!addressEdit?.valid && (addressEdit?.touched || addressEdit?.dirty)">
+                  <div [hidden]="!addressEdit?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" placeholder="studentPhone" autofocus formControlName="phone"
+                  name="phone">
+                <label>Số điện thoại</label>
+                <div *ngIf="!phoneEdit?.valid && (phoneEdit?.touched || phoneEdit?.dirty)">
+                  <div [hidden]="!phoneEdit?.errors?.required">
+                    <p class="text-danger p-1">Phần này không được để trống</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-success" value="Cập nhật" [disabled]="!editStudentForm.valid">
+              <input type="button" class="btn btn-secondary" data-bs-dismiss="modal" value="Cancel">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

@@ -1,0 +1,14 @@
+{
+  "students": [
+    {
+      "name": "Phạm Văn Thanh",
+      "code": "MSV-01",
+      "gender": "Nam",
+      "dob": "26/03/1996",
+      "email": "thanh@gmail.com",
+      "address": "Nam Định",
+      "phone": "013212313",
+      "id": 1
+    }
+  ]
+}
